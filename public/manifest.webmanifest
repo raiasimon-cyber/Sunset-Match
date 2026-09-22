@@ -1,0 +1,11 @@
+{
+  "name": "Sunset&Match",
+  "short_name": "Sunset&Match",
+  "description": "Les terrasses au soleil à Paris, heure par heure.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1B2440",
+  "theme_color": "#F6C343",
+  "lang": "fr",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

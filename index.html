@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6C343">
+  <meta name="description" content="Trouve les terrasses au soleil autour de toi, heure par heure, avec l'ombre réelle des immeubles et la météo.">
+  <title>Sunset&amp;Match</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="map" aria-label="Carte des terrasses"></div>
+  <div id="tint" aria-hidden="true"></div>
+  <div id="rain" aria-hidden="true" hidden></div>
+
+  <header class="top">
+    <div class="brand glass">Sunset&amp;Match</div>
+    <div class="search">
+      <input id="q" type="search" placeholder="Une terrasse, une adresse…" autocomplete="off" aria-label="Chercher une terrasse ou une adresse">
+      <div class="results glass" id="results" hidden></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="wx-btn glass" id="wxBtn" aria-expanded="false" aria-controls="wxPanel">
+      <span class="ic" id="wxIcon">☀️</span><span><b id="wxTemp">--°</b><small id="wxLabel">Météo</small></span>
+    </button>
+  </header>
+
+  <div class="wx-panel glass" id="wxPanel" hidden>
+    <h3 id="wxTitle">Météo</h3>
+    <p class="sub" id="wxDetail"></p>
+    <div class="hours" id="wxHours"></div>
+    <p class="note">Prévisions Open-Meteo. Quand le ciel est très couvert, aucune terrasse n'est affichée au soleil. Entre 50 et 85 % de nuages, le soleil est indiqué comme intermittent.</p>
+  </div>
+
+  <p class="hint glass" id="hint" hidden></p>
+
+  <!-- Onglet Carte -->
+  <div class="bottom" id="mapUi">
+    <section class="sheet glass" id="sheet" hidden aria-live="polite">
+      <button class="close" id="shClose" aria-label="Fermer">×</button>
+      <h2 id="shName"></h2>
+      <p class="sub" id="shMeta"></p>
+      <p class="status" id="shStatus"></p>
+      <div class="strip" id="shStrip"></div>
+      <div class="ticks"><span>6h</span><span>9h</span><span>12h</span><span>15h</span><span>18h</span><span>21h</span></div>
+      <div class="legend">
+        <span style="--c:#F6C343">Soleil</span><span style="--c:#F3D08A">Soleil intermittent</span><span style="--c:#56627C">Ombre des immeubles</span><span style="--c:#B7BFCB">Couvert</span>
+      </div>
+      <div class="sheet-actions">
+        <button class="btn" id="shFav" aria-pressed="false">♡ Ajouter aux favoris</button>
+        <a class="btn" id="shGo" target="_blank" rel="noopener">Y aller</a>
+      </div>
+    </section>
+
+    <section class="timebar glass">
+      <div class="trow">
+        <span class="clock" id="clock">--:--</span>
+        <input class="pill" type="date" id="date" aria-label="Date">
+        <button class="pill" id="now">Maintenant</button>
+        <button class="play" id="play" aria-label="Faire défiler la journée">▶</button>
+      </div>
+      <input class="slider" id="time" type="range" min="300" max="1380" step="1" aria-label="Heure">
+      <div class="meta"><span>Lever <b id="rise">--</b></span><span>Coucher <b id="set">--</b></span><span id="count"></span></div>
+      <div class="sundir" id="sundir"></div>
+    </section>
+  </div>
+
+  <!-- Onglet Pour toi -->
+  <main class="page glass" id="page-reco" hidden>
+    <h1>Ta journée au soleil</h1>
+    <p class="lead">Choisis ton humeur. Le programme suit le soleil et la météo du jour, avec des lieux et des terrasses du quartier affiché sur la carte.</p>
+    <div class="chips" id="moods"></div>
+    <ol class="timeline" id="timeline"></ol>
+  </main>
+
+  <!-- Onglet Événements -->
+  <main class="page glass" id="page-events" hidden>
+    <h1>Événements</h1>
+    <p class="lead">Des moments pensés autour du soleil, et nos pique-niques déco clés en main.</p>
+    <h2 class="section">À venir</h2>
+    <div class="events" id="events"></div>
+    <h2 class="section">Pique-niques déco</h2>
+    <p class="lead">On installe tout dans un parc ensoleillé : nappe, coussins, déco et panier. Tu n'as plus qu'à arriver.</p>
+    <div class="offers" id="offers"></div>
+    <!-- Formulaire géré par Netlify Forms : les demandes arrivent dans ton tableau de bord Netlify. -->
+    <form class="book" id="bookForm" name="reservation" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="reservation">
+      <p hidden><label>Ne pas remplir <input name="bot-field"></label></p>
+      <label>Ce que tu réserves <select name="choix" id="bChoice" required></select></label>
+      <label>Lieu souhaité <input name="lieu" id="bPlace" placeholder="Un parc près de chez toi"></label>
+      <label>Date <input type="date" name="date" id="bDate" required></label>
+      <label>Heure d'arrivée <select name="heure" id="bHour"></select></label>
+      <label>Nombre de personnes <input type="number" name="personnes" min="1" max="30" value="2" required></label>
+      <label>Prénom <input name="prenom" required autocomplete="given-name"></label>
+      <label>E-mail <input type="email" name="email" required autocomplete="email"></label>
+      <button class="cta" type="submit">Envoyer la demande</button>
+      <p class="note" id="bNote"></p>
+    </form>
+  </main>
+
+  <!-- Onglet Favoris -->
+  <main class="page glass" id="page-favs" hidden>
+    <h1>Tes favoris</h1>
+    <p class="lead">Les terrasses que tu as gardées. Touche-en une pour la retrouver sur la carte.</p>
+    <div id="favList"></div>
+  </main>
+
+  <nav class="tabs glass" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="map"><span>🗺️</span>Carte</button>
+    <button role="tab" aria-selected="false" data-tab="reco"><span>✨</span>Pour toi</button>
+    <button role="tab" aria-selected="false" data-tab="events"><span>🎟️</span>Événements</button>
+    <button role="tab" aria-selected="false" data-tab="favs"><span>♡</span>Favoris</button>
+  </nav>
+  <div class="toast" id="toast" role="status"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
