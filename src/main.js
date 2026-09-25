@@ -53,6 +53,12 @@ const map = new maplibregl.Map({
   style: STYLE_URL,
   ...START,
   maxPitch: 70,
+  cooperativeGestures: true,
+  locale: {
+    'CooperativeGesturesHandler.WindowsHelpText': 'Utilise Ctrl + molette pour zoomer sur la carte',
+    'CooperativeGesturesHandler.MacHelpText': 'Utilise ⌘ + molette pour zoomer sur la carte',
+    'CooperativeGesturesHandler.MobileHelpText': 'Utilise deux doigts pour déplacer la carte',
+  },
   attributionControl: { compact: true, customAttribution: 'Terrasses © Ville de Paris (ODbL) et contributeurs OpenStreetMap, météo Open-Meteo' },
   canvasContextAttributes: { antialias: true },
 });
